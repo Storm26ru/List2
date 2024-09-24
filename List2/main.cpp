@@ -25,7 +25,7 @@ public:
 		size = 0;
 		cout << "LConstructor:\t" << this << endl;
 	}
-	~List() { cout << "LDestructor:\t" << this << endl; }
+	~List() { while (Head)pop_front(); cout << "LDestructor:\t" << this << endl; }
 
 	//						Adding elements:
 	void push_front(int Data)
@@ -60,9 +60,10 @@ public:
 		if (Head->pNext)
 		{
 			Head = Head->pNext;
+			delete Head->pPrev;
 			Head->pPrev = nullptr;
 		}
-		else Head = Tail = nullptr;
+		else { delete Head; Head = Tail = nullptr; }
 		size--;
 	}
 	void pop_back()
@@ -71,13 +72,15 @@ public:
 		if (Tail->pPrev)
 		{
 			Tail = Tail->pPrev;
+			delete Tail->pNext;
 			Tail->pNext = nullptr;
 		}	
-		else Head = Tail = nullptr;
+		else { delete Tail; Head = Tail = nullptr; }
 		size--;
 	}
 	void insert(int index)
 	{
+
 
 	}
 
