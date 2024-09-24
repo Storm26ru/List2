@@ -78,9 +78,22 @@ public:
 		else { delete Tail; Head = Tail = nullptr; }
 		size--;
 	}
-	void insert(int index)
+	void insert(int Data, int index)
 	{
-
+		Element* New = new Element(Data);
+		if (index < size / 2)
+		{
+			Element* Temp = Head;
+			for (int i = 0; i < index; i++) Temp = Temp->pNext;
+			New->pNext = Temp;
+			New->pPrev = Temp->pPrev;
+			Temp->pPrev = New;
+		}
+		else
+		{
+			Element* Temp = Tail;
+			for (int i = size; i > index; i--)Temp = Temp->pPrev;
+		}
 
 	}
 
