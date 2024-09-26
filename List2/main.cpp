@@ -80,19 +80,52 @@ public:
 	}
 	void insert(int Data, int index)
 	{
-		Element* New = new Element(Data);
-		if (index < size / 2)
-		{
-			Element* Temp = Head;
-			for (int i = 0; i < index; i++) Temp = Temp->pNext;
-			New->pNext = Temp;
-			New->pPrev = Temp->pPrev;
-			Temp->pPrev = New;
-		}
+		if (Head == nullptr && Tail == nullptr) return;
+		if (index == 0)push_front(Data);
+		if (index == size)push_back(Data);
 		else
 		{
-			Element* Temp = Tail;
-			for (int i = size; i > index; i--)Temp = Temp->pPrev;
+			Element* New = new Element(Data);
+			Element* Temp;
+			if (index < size / 2)
+			{
+				Temp = Head;
+				for (int i = 0; i < index; i++) Temp = Temp->pNext;
+			}
+			else
+			{
+				Temp = Tail;
+				for (int i = size; i > index + 1; i--)Temp = Temp->pPrev;
+			}
+			New->pNext = Temp;
+			New->pPrev = Temp->pPrev;
+			Temp->pPrev->pNext = New;
+			Temp->pPrev = New;
+		    size++;
+		}
+	}
+	void erase(int index)
+	{
+		Element* Temp;
+		if (Head == nullptr && Tail == nullptr||index>=size) return;
+		if (index == size - 1) { pop_back(); return; }
+		if (index == 0)pop_front();
+		else
+		{
+			if (index < size / 2)
+			{
+				Temp = Head;
+				for (int i = 0; i < index; i++) Temp = Temp->pNext;
+			}
+			else
+			{
+				Temp = Tail;
+				for (int i = size; i > index + 1; i--)Temp = Temp->pPrev;
+			}
+			Temp->pPrev->pNext = Temp->pNext;
+			Temp->pNext->pPrev = Temp->pPrev;
+			delete Temp;
+			size--;
 		}
 
 	}
@@ -125,17 +158,26 @@ void main()
 {
 	setlocale(LC_ALL, "");
 	int n;
+	int data;
 	cout << "Введите размер списка: "; cin >> n;
-	List list;
+	List list = {3,5,8,13,21};
 	for (int i = 0; i < n; i++)
 	{
 		list.push_back(rand() % 100);
 	}
 	list.print();
-	list.pop_front();
+	/*list.pop_front();
 	list.print();
 	list.pop_back();
 	list.print();
+	cout << "Введите индекс элемента для вставки: "; cin >> n;
+	cout << "Введите значение элемента: "; cin >> data;
+	list.insert(data, n);
+	list.print();*/
+	cout << "Введите индекс элемента для удаления: "; cin >> n;
+	list.erase(n);
+	list.print();
+
 	
 	
 	
