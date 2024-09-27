@@ -5,16 +5,16 @@ using namespace std;
 #define tab "\t"
 #define delimiter "\n----------------------------------\n"
 
-class List
+template<typename T> class List
 {
 	class Element
 	{
-		int Data;
+		T Data;
 		Element* pPrev;
 		Element* pNext;
 
 	public:
-		Element(int Data, Element* pPrev=nullptr, Element* pNext = nullptr) : Data(Data), pPrev(pPrev), pNext(pNext) { cout << "EConstructor:\t" << this << endl; }
+		Element(T Data, Element* pPrev=nullptr, Element* pNext = nullptr) : Data(Data), pPrev(pPrev), pNext(pNext) { cout << "EConstructor:\t" << this << endl; }
 		~Element() { cout << "EDestructor:\t" << this << endl; }
 		friend class List;
 	} *Head,*Tail;
@@ -30,7 +30,7 @@ class List
 			return Iterator(temp);
 		}
 		bool operator !=(const Iterator& li)const { return ptr != li.ptr; }
-		const int& operator *()const { return ptr->Data; }
+		const T& operator *()const { return ptr->Data; }
 
 	};
 	size_t size;
@@ -41,9 +41,9 @@ public:
 		size = 0;
 		cout << "LConstructor:\t" << this << endl;
 	}
-	List(initializer_list<int>l)
+	List(initializer_list<T>l)
 	{
-		for (int data : l)
+		for (T data : l)
 		{
 			push_back(data);
 		}
@@ -56,7 +56,7 @@ public:
 	~List() { while (Head)pop_front(); cout << "LDestructor:\t" << this << endl; }
 
 	//						Adding elements:
-	void push_front(int Data)
+	void push_front(T Data)
 	{
 		if (Head == nullptr && Tail == nullptr) Head = Tail = new Element(Data);
 		else
@@ -70,7 +70,7 @@ public:
 		size++;
 
 	}
-	void push_back(int Data)
+	void push_back(T Data)
 	{
 		if (Head == nullptr && Tail == nullptr) Head = Tail = new Element(Data);
 		else
@@ -106,7 +106,7 @@ public:
 		else { delete Tail; Head = Tail = nullptr; }
 		size--;
 	}
-	void insert(int Data, int index)
+	void insert(T Data, int index)
 	{
 		if (Head == nullptr && Tail == nullptr) return;
 		if (index == 0)push_front(Data);
@@ -184,7 +184,7 @@ public:
 	{
 		if (this == &other)return *this;
 		while (Head)pop_front();
-		for (int i : other)push_back(i);
+		for (T i : other)push_back(i);
 		return *this;
 	}
 
@@ -192,10 +192,10 @@ public:
 
 };
 	
-List  operator + (const List& left, const List& right)
+template<typename T> List<T>  operator + (const List<T>& left, const List<T>& right)
 {
-	List temp = left;
-	for (int i : right)temp.push_back(i);
+	List<T> temp = left;
+	for (T i : right)temp.push_back(i);
 	return temp;
 }
 
@@ -222,16 +222,16 @@ void main()
 	cout << "Введите индекс элемента для удаления: "; cin >> n;
 	list.erase(n);
 	list.print();
-	List list = { 3, 5, 8, 13, 21 };
+	List <int> list = { 3, 5, 8, 13, 21 };
 	for (int i : list)
 	{
 		cout << i << tab;
 	}
 	cout << endl;*/
-	List list1 = { 3, 5, 8, 13, 21 };
-	List list2 = { 34, 55, 89 };
-	List list3 = list1 + list2;
-	for (int i : list3)
+	List<int> list1 = { 3, 5, 8, 13, 21 };
+	List<int> list2 = { 34, 55, 89 };
+	List<int> list3 = list1 + list2;
+	for (auto i : list3)
 	{
 		cout << i << tab;
 	}
