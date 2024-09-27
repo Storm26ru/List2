@@ -18,7 +18,7 @@ class List
 		~Element() { cout << "EDestructor:\t" << this << endl; }
 		friend class List;
 	} *Head,*Tail;
-	class Iterator
+	 class Iterator ///????????????????????????????
 	{
 		Element* ptr;
 	public:
@@ -47,6 +47,11 @@ public:
 		{
 			push_back(data);
 		}
+	}
+	List(const List& other):List() //???????????????????
+	{
+		//for (int i : other) push_back(i);
+		*this = other;
 	}
 	~List() { while (Head)pop_front(); cout << "LDestructor:\t" << this << endl; }
 
@@ -172,12 +177,27 @@ public:
 			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
 		cout << "Head:\t" << Head << endl;
 		cout << "Количество элементов списка: " << size << endl;
-
+		
+	}
+	//						Operators:
+	List& operator=(const List& other)
+	{
+		if (this == &other)return *this;
+		while (Head)pop_front();
+		for (int i : other)push_back(i);
+		return *this;
 	}
 
 
 
 };
+	
+List  operator + (const List& left, const List& right)
+{
+	List temp = left;
+	for (int i : right)temp.push_back(i);
+	return temp;
+}
 
 void main()
 {
@@ -201,10 +221,17 @@ void main()
 	list.print();
 	cout << "Введите индекс элемента для удаления: "; cin >> n;
 	list.erase(n);
-	list.print();*/
+	list.print();
 	List list = { 3, 5, 8, 13, 21 };
-	//list.print();
 	for (int i : list)
+	{
+		cout << i << tab;
+	}
+	cout << endl;*/
+	List list1 = { 3, 5, 8, 13, 21 };
+	List list2 = { 34, 55, 89 };
+	List list3 = list1 + list2;
+	for (int i : list3)
 	{
 		cout << i << tab;
 	}
