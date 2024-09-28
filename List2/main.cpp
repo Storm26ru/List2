@@ -18,23 +18,25 @@ class List
 		~Element() { cout << "EDestructor:\t" << this << endl; }
 		friend class List;
 	} *Head,*Tail;
-	 class Iterator ///????????????????????????????
+
+	 class Iterator
 	{
 		Element* ptr;
 	public:
 		Iterator(Element* ptr) : ptr(ptr) {}
 		Iterator operator++()
 		{
-			Element* temp = ptr;
 			ptr = ptr->pNext;
-			return Iterator(temp);
+			return *this;
 		}
-		bool operator !=(const Iterator& li)const { return ptr != li.ptr; }
+		bool operator !=(const Iterator& other)const { return ptr != other.ptr; }
 		const int& operator *()const { return ptr->Data; }
-
 	};
+
 	size_t size;
+
 public:
+	//						Constructors:
 	List()
 	{
 		Head = Tail = nullptr;
@@ -43,12 +45,10 @@ public:
 	}
 	List(initializer_list<int>l)
 	{
-		for (int data : l)
-		{
-			push_back(data);
-		}
+		// (int const* data = l.begin(); data != l.end(); ++data) push_back(*data);
+		for (int data : l) push_back(data);
 	}
-	List(const List& other):List() //???????????????????
+	List(const List& other):List()
 	{
 		//for (int i : other) push_back(i);
 		*this = other;
@@ -65,7 +65,6 @@ public:
 			New->pNext = Head;
 			Head->pPrev = New; 
 			Head = New;
-			
 		}
 		size++;
 
@@ -157,11 +156,18 @@ public:
 		}
 
 	}
+	//						Operators:
+	List& operator=(const List& other)
+	{
+		if (this == &other)return *this;
+		while (Head)pop_front();
+		//for (Element* i = other.Head; i; i = i->pNext)push_back(i->Data);
+		for (int i : other)push_back(i);
+		return *this;
+	}
+	//						Methods:
 	Iterator begin()const { return Iterator(Head); }
 	Iterator end()const { return Iterator(nullptr); }
-
-
-	//						Methods:
 	void print()const
 	{
 		cout << "Head:\t" << Head << endl;
@@ -179,17 +185,6 @@ public:
 		cout << "Количество элементов списка: " << size << endl;
 		
 	}
-	//						Operators:
-	List& operator=(const List& other)
-	{
-		if (this == &other)return *this;
-		while (Head)pop_front();
-		for (int i : other)push_back(i);
-		return *this;
-	}
-
-
-
 };
 	
 List  operator + (const List& left, const List& right)
@@ -199,10 +194,13 @@ List  operator + (const List& left, const List& right)
 	return temp;
 }
 
+//#define BASE
+#define ITERATOR
 void main()
 {
 	setlocale(LC_ALL, "");
-	/*int n;
+#ifdef BASE
+	int n;
 	int data;
 	cout << "Введите размер списка: "; cin >> n;
 	List list;
@@ -222,12 +220,15 @@ void main()
 	cout << "Введите индекс элемента для удаления: "; cin >> n;
 	list.erase(n);
 	list.print();
+#endif // BASE
+
+#ifdef ITERATOR
 	List list = { 3, 5, 8, 13, 21 };
 	for (int i : list)
 	{
 		cout << i << tab;
 	}
-	cout << endl;*/
+	cout << endl;
 	List list1 = { 3, 5, 8, 13, 21 };
 	List list2 = { 34, 55, 89 };
 	List list3 = list1 + list2;
@@ -236,6 +237,8 @@ void main()
 		cout << i << tab;
 	}
 	cout << endl;
+#endif // ITERATOR
+
 	
 
 	
@@ -244,65 +247,4 @@ void main()
 
 
 }
-/*https://www.cyberforum.ru/cpp-beginners/thread2382930.html
-#include <iostream>
- 
-using namespace std;
- 
-struct ListItem {
-    ListItem *next;
-    int val;
-    ListItem() : next(nullptr), val(0) {}
-    ListItem(int v) : next(nullptr), val(v) {}
-};
- 
-class ListIterator {
-    ListItem *ptr;
-public:
-    ListIterator(ListItem *pel) : ptr(pel) {}
-    ListIterator operator ++() {
-        ListItem *tmp = ptr;
-        ptr = ptr->next;
-        return ListIterator(tmp);
-    }
-    bool operator != (const ListIterator& li) const {
-        return ptr != li.ptr;
-    }
-    ListItem operator *() const {
-        return *ptr;
-    }
-};
- 
-class List {
-    ListItem *head;
-public:
-    List() : head(nullptr) {}
-    List(initializer_list<int> lst) : head(nullptr) {
-        for (auto el = lst.begin(); el != lst.end(); ++el)
-            add(*el);
-    }
-    void add(int el) {
-        ListItem *li = new ListItem(el);
-        li->next = head;
-        head = li;
-    }
-    ListIterator begin() const {
-        return ListIterator(head);
-    }
-    ListIterator end() const {
-        return ListIterator(nullptr);
-    }
-};
- 
-int main() {
-    int a[] = { 1, 2, 3, 4, 5 };
-    for (auto el : a)
-        cout << el << ' ';
-    cout << endl;
- 
-    List b = { 1, 2, 3, 4, 5 };
-    for (const auto &el : b)
-        cout << el.val << ' ';
-    cout << endl;
-}*/
-
+//https://www.cyberforum.ru/cpp-beginners/thread2382930.html
