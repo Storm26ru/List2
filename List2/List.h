@@ -19,16 +19,16 @@ template<typename T> class List
 		~Element() { cout << "EDestructor:\t" << this << endl; }
 		friend class List;
 	} *Head, * Tail;
-	class Iterator ///????????????????????????????
+
+	class Iterator 
 	{
 		Element* ptr;
 	public:
 		Iterator(Element* ptr) : ptr(ptr) {}
 		Iterator operator++()
 		{
-			Element* temp = ptr;
 			ptr = ptr->pNext;
-			return Iterator(temp);
+			return *this;
 		}
 		bool operator !=(const Iterator& li)const { return ptr != li.ptr; }
 		const T& operator *()const { return ptr->Data; }
@@ -44,12 +44,9 @@ public:
 	}
 	List(initializer_list<T>l)
 	{
-		for (T data : l)
-		{
-			push_back(data);
-		}
+		for (T data : l) push_back(data);
 	}
-	List(const List& other) :List() //???????????????????
+	List(const List& other) :List()
 	{
 		//for (int i : other) push_back(i);
 		*this = other;
@@ -69,7 +66,6 @@ public:
 
 		}
 		size++;
-
 	}
 	void push_back(T Data)
 	{
@@ -156,13 +152,18 @@ public:
 			delete Temp;
 			size--;
 		}
-
 	}
+	//						Operators:
+	List& operator=(const List& other)
+	{
+		if (this == &other)return *this;
+		while (Head)pop_front();
+		for (T i : other)push_back(i);
+		return *this;
+	}
+	//						Methods:
 	Iterator begin()const { return Iterator(Head); }
 	Iterator end()const { return Iterator(nullptr); }
-
-
-	//						Methods:
 	void print()const
 	{
 		cout << "Head:\t" << Head << endl;
@@ -180,17 +181,6 @@ public:
 		cout << "Количество элементов списка: " << size << endl;
 
 	}
-	//						Operators:
-	List& operator=(const List& other)
-	{
-		if (this == &other)return *this;
-		while (Head)pop_front();
-		for (T i : other)push_back(i);
-		return *this;
-	}
-
-
-
 };
 
 template<typename T> List<T>  operator + (const List<T>& left, const List<T>& right)
