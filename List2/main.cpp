@@ -247,4 +247,4 @@ void main()
 
 
 }
-//https://www.cyberforum.ru/cpp-beginners/thread2382930.html
+
