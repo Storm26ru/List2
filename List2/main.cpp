@@ -43,24 +43,24 @@ public:
 
 		ConstIterator& operator++() 
 		{
-			Temp = Temp->pNext;
+			ConstBaseIterator:: Temp = ConstBaseIterator:: Temp->pNext; //????????????
 			return *this;
 		}
 		ConstIterator operator++(int)
 		{
 			ConstIterator old = *this;
-			Temp = Temp->pNext;
+			ConstBaseIterator:: Temp = ConstBaseIterator:: Temp->pNext;
 			return old;
 		}
 		ConstIterator& operator--()
 		{
-			Temp = Temp->pPrev;
+			ConstBaseIterator::Temp = ConstBaseIterator::Temp->pPrev;
 			return *this;
 		}
 		ConstIterator operator--(int)
 		{
 			ConstIterator old = *this;
-			Temp = Temp->pPrev;
+			ConstBaseIterator::Temp = ConstBaseIterator::Temp->pPrev;
 			return old;
 		}
 	};
@@ -73,24 +73,24 @@ public:
 
 		 ConstReverseIterator& operator++()
 		 {
-			 Temp = Temp->pPrev;
+			 ConstBaseIterator::Temp = ConstBaseIterator::Temp->pPrev;
 			 return *this;
 		 }
 		 ConstReverseIterator operator++(int)
 		 {
 			 ConstReverseIterator old = *this;
-			 Temp = Temp->pPrev;
+			 ConstBaseIterator::Temp = ConstBaseIterator::Temp->pPrev;
 			 return old;
 		 }
 		 ConstReverseIterator& operator--()
 		 {
-			 Temp = Temp->pNext;
+			 ConstBaseIterator::Temp = ConstBaseIterator::Temp->pNext;
 			 return *this;
 		 }
 		 ConstReverseIterator operator--(int)
 		 {
 			 ConstReverseIterator old = *this;
-			 Temp = Temp->pNext;
+			 ConstBaseIterator::Temp = ConstBaseIterator::Temp->pNext;
 			 return old;
 		 }
 	 };
@@ -99,14 +99,14 @@ public:
 	 public:
 		 Iterator(Element*Temp):ConstIterator(Temp){}
 		 ~Iterator(){}
-		 T& operator*() { return Temp->Data; }
+		 T& operator*() { return ConstBaseIterator::Temp->Data; }
 	 };
 	 class ReverseIterator :public ConstReverseIterator
 	 {
 	 public:
 		 ReverseIterator(Element*Temp):ConstReverseIterator(Temp){}
 		 ~ReverseIterator(){}
-		 T& operator*() { return Temp->Data; }
+		 T& operator*() { return ConstBaseIterator::Temp->Data; }
 	 };
 
 	//						Constructors:
@@ -116,17 +116,17 @@ public:
 		size = 0;
 		cout << "LConstructor:\t" << this << endl;
 	}
-	List(const std::initializer_list<T>l)
+	List(const std::initializer_list<T>&l)
 	{
 		//for(int const* data = l.begin(); data != l.end(); ++data) push_back(*data);
 		for (T data : l) push_back(data);
 	}
-	List(const List& other):List()
+	List(const List<T>& other):List()
 	{
 		//for (int i : other) push_back(i);
 		*this = other;
 	}
-	List(List&& other) :List()
+	List(List<T>&& other) :List()
 	{
 		*this = std::move(other);
 	}
@@ -228,7 +228,7 @@ public:
 
 	}
 	//						Operators:
-	List& operator=(const List& other)
+	List<T>& operator=(const List<T>& other)
 	{
 		if (this == &other)return *this;
 		while (Head)pop_front();
@@ -236,7 +236,7 @@ public:
 		for (T i : other)push_back(i);
 		return *this;
 	}
-	List& operator=(List&& other)
+	List<T>& operator=(List<T>&& other)
 	{
 		if (this == &other)return *this;
 		while (Head)pop_front();
@@ -281,7 +281,7 @@ public:
 	
 template <typename T>List<T>  operator + (const List<T>& left, const List<T>& right)
 {
-	List temp = left;
+	List<T> temp = left;
 	for (T i : right)temp.push_back(i);
 	return temp;
 }
