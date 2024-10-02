@@ -315,8 +315,8 @@ void main()
 #endif // BASE
 
 #ifdef ITERATOR
-	List <int> list = { 3, 5, 8, 13, 21 };
-	for (int i : list)
+	List <std::string> list = { "3", "5", "8", "13", "21" };
+	for (std::string i : list)
 	{
 		cout << i << tab;
 	}
